@@ -38,9 +38,9 @@ export function RegisterForm() {
     setSuccessMessage(undefined)
 
     startTransition(() => {
-      register(values).then((data) => {
-        setErrorMessage(data.error)
-        setSuccessMessage(data.success)
+      register(values).then((result) => {
+        setErrorMessage(result.error)
+        setSuccessMessage(result.success)
       })
     })
   }

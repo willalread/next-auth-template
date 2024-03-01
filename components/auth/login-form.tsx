@@ -42,9 +42,9 @@ export function LoginForm() {
     setSuccessMessage(undefined)
 
     startTransition(() => {
-      login(values, callbackUrl).then((data) => {
-        setErrorMessage(data.error)
-        setSuccessMessage(data.success)
+      login(values, callbackUrl).then((result) => {
+        setErrorMessage(result.error)
+        setSuccessMessage(result.success)
       })
     })
   }
