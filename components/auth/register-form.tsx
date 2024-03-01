@@ -1,13 +1,11 @@
 "use client"
 
 import { useState, useTransition } from "react"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { login } from "@/lib/actions/login"
-import { loginSchema, type LoginSchema } from "@/lib/schemas"
+import { register } from "@/lib/actions/register"
+import { registerSchema, type RegisterSchema } from "@/lib/schemas"
 import { CardWrapper } from "@/components/auth/card-wrapper"
 import { FormError, FormSuccess } from "@/components/form-status"
 import { Button } from "@/components/ui/button"
@@ -21,28 +19,26 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-export function LoginForm() {
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl")
-
+export function RegisterForm() {
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
   const [successMessage, setSuccessMessage] = useState<string | undefined>()
   const [isPending, startTransition] = useTransition()
 
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   })
 
-  function handleSubmit(values: LoginSchema) {
+  function handleSubmit(values: RegisterSchema) {
     setErrorMessage(undefined)
     setSuccessMessage(undefined)
 
     startTransition(() => {
-      login(values, callbackUrl).then((data) => {
+      register(values).then((data) => {
         setErrorMessage(data.error)
         setSuccessMessage(data.success)
       })
@@ -51,16 +47,34 @@ export function LoginForm() {
 
   return (
     <CardWrapper
-      description="Welcome back"
+      description="Create an account"
       backButton={{
-        href: "/auth/register",
-        label: "Don't have an account?",
+        href: "/auth/login",
+        label: "Already have an account?",
       }}
       showSocials
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      placeholder="John Doe"
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -101,7 +115,7 @@ export function LoginForm() {
           <FormError message={errorMessage} />
           <FormSuccess message={successMessage} />
           <Button disabled={isPending} type="submit" className="w-full">
-            Login
+            Register
           </Button>
         </form>
       </Form>

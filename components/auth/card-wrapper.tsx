@@ -40,7 +40,7 @@ export function CardWrapper({
 
   return (
     <Card className="w-full max-w-[400px] overflow-hidden shadow-md">
-      <CardHeader className="items-center space-y-4">
+      <CardHeader className="items-center">
         <CardTitle className="text-3xl leading-normal tracking-normal">
           🔐 Auth
         </CardTitle>
