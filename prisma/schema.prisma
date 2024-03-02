@@ -33,5 +33,11 @@ model User {
   emailVerified DateTime?
   password      String?
   image         String?
+  role          UserRole  @default(USER)
   accounts      Account[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }

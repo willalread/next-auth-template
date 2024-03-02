@@ -1,33 +1,35 @@
 import NextAuth from "next-auth"
 
-import {
-  authConfig,
-  apiAuthPrefix,
-  authRoutes,
-  publicRoutes,
-  DEFAULT_LOGIN_REDIRECT,
-} from "@/lib/config/auth"
+import authConfig from "@/auth.config"
 
-const { auth } = NextAuth(authConfig)
+const { auth: middleware } = NextAuth(authConfig)
 
-export default auth((req) => {
+export default middleware((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname)
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
-
-  if (isApiAuthRoute) {
+  if (nextUrl.pathname.startsWith("/api/auth")) {
     return
   }
+
+  const isAuthRoute = [
+    "/auth/login",
+    "/auth/register",
+    "/auth/error",
+    "/auth/reset",
+    "/auth/new-password",
+  ].includes(nextUrl.pathname)
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+      return Response.redirect(new URL("/settings", nextUrl))
     }
     return
   }
+
+  const isPublicRoute = ["/", "/auth/new-verification"].includes(
+    nextUrl.pathname,
+  )
 
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/auth/login", nextUrl))

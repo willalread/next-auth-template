@@ -2,8 +2,7 @@
 
 import { AuthError } from "next-auth"
 
-import { signIn } from "@/lib/auth"
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/config/auth"
+import { signIn } from "@/auth"
 import { loginSchema, type LoginSchema } from "@/lib/schemas"
 
 export async function login(values: LoginSchema, callbackUrl: string | null) {
@@ -19,7 +18,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || "/settings",
     })
   } catch (error) {
     if (error instanceof AuthError) {
