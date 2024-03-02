@@ -1,4 +1,5 @@
 import NextAuth from "next-auth"
+import "next-auth/jwt"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { UserRole } from "@prisma/client"
 
@@ -12,12 +13,30 @@ declare module "next-auth" {
   }
 }
 
+declare module "next-auth/jwt" {
+  interface JWT {
+    role: UserRole
+  }
+}
+
 export const {
   handlers: { GET, POST },
   auth,
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+  },
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      })
+    },
+  },
   callbacks: {
     async signIn({ account, user }) {
       // Allow OAuth without email verification
@@ -35,7 +54,7 @@ export const {
     async session({ session, token }) {
       if (session.user) {
         if (token.sub) session.user.id = token.sub
-        if (token.role) session.user.role = token.role as UserRole
+        if (token.role) session.user.role = token.role
       }
 
       return session

@@ -24,6 +24,10 @@ import { Input } from "@/components/ui/input"
 export function LoginForm() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl")
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with a different provider."
+      : undefined
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
   const [successMessage, setSuccessMessage] = useState<string | undefined>()
@@ -94,11 +98,19 @@ export function LoginForm() {
                     />
                   </FormControl>
                   <FormMessage />
+                  <Button
+                    variant="link"
+                    size="sm"
+                    asChild
+                    className="px-0 font-normal"
+                  >
+                    <Link href="/auth/reset">Forgot password?</Link>
+                  </Button>
                 </FormItem>
               )}
             />
           </div>
-          <FormError message={errorMessage} />
+          <FormError message={errorMessage || urlError} />
           <FormSuccess message={successMessage} />
           <Button disabled={isPending} type="submit" className="w-full">
             Login

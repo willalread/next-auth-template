@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { signIn } from "next-auth/react"
 import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 
@@ -34,8 +35,8 @@ export function CardWrapper({
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl")
 
-  function handleClick(provider: "google" | "github") {
-    // TODO: Implement social login
+  function handleSocialAuth(provider: "google" | "github") {
+    signIn(provider, { callbackUrl: callbackUrl || "/settings" })
   }
 
   return (
@@ -54,7 +55,7 @@ export function CardWrapper({
               variant="outline"
               size="lg"
               className="w-full"
-              onClick={() => handleClick("google")}
+              onClick={() => handleSocialAuth("google")}
             >
               <FcGoogle className="h-5 w-5" />
             </Button>
@@ -62,7 +63,7 @@ export function CardWrapper({
               variant="outline"
               size="lg"
               className="w-full"
-              onClick={() => handleClick("github")}
+              onClick={() => handleSocialAuth("github")}
             >
               <FaGithub className="h-5 w-5" />
             </Button>
