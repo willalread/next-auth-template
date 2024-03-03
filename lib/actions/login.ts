@@ -3,6 +3,9 @@
 import { AuthError } from "next-auth"
 
 import { signIn } from "@/auth"
+import { createVerificationToken } from "@/lib/data/verification-token"
+import { getUserByEmail } from "@/lib/data/user"
+import { sendVerificationEmail } from "@/lib/mail"
 import { loginSchema, type LoginSchema } from "@/lib/schemas"
 
 export async function login(values: LoginSchema, callbackUrl: string | null) {
@@ -13,6 +16,23 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
   }
 
   const { email, password } = result.data
+
+  const user = await getUserByEmail(email)
+
+  if (!user || !user.email || !user.password) {
+    return { error: "Email does not exist." }
+  }
+
+  if (!user.emailVerified) {
+    const verificationToken = await createVerificationToken(user.email)
+
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token,
+    )
+
+    return { success: "Confirmation email sent." }
+  }
 
   try {
     await signIn("credentials", {
@@ -32,6 +52,4 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
 
     throw error
   }
-
-  return { success: "Email sent." }
 }

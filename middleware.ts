@@ -16,8 +16,8 @@ export default middleware((req) => {
     "/auth/login",
     "/auth/register",
     "/auth/error",
-    "/auth/reset",
-    "/auth/new-password",
+    "/auth/forgot-password",
+    "/auth/reset-password",
   ].includes(nextUrl.pathname)
 
   if (isAuthRoute) {
@@ -27,9 +27,7 @@ export default middleware((req) => {
     return
   }
 
-  const isPublicRoute = ["/", "/auth/new-verification"].includes(
-    nextUrl.pathname,
-  )
+  const isPublicRoute = ["/", "/auth/confirm-email"].includes(nextUrl.pathname)
 
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/auth/login", nextUrl))

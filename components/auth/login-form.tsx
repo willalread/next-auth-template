@@ -47,8 +47,8 @@ export function LoginForm() {
 
     startTransition(() => {
       login(values, callbackUrl).then((result) => {
-        setErrorMessage(result.error)
-        setSuccessMessage(result.success)
+        setErrorMessage(result?.error)
+        setSuccessMessage(result?.success)
       })
     })
   }
@@ -104,7 +104,7 @@ export function LoginForm() {
                     asChild
                     className="px-0 font-normal"
                   >
-                    <Link href="/auth/reset">Forgot password?</Link>
+                    <Link href="/auth/forgot-password">Forgot password?</Link>
                   </Button>
                 </FormItem>
               )}

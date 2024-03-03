@@ -49,6 +49,8 @@ export const {
       // Prevent sign in without email verification
       if (!currentUser?.emailVerified) return false
 
+      // TODO: Add 2FA check
+
       return true
     },
     async session({ session, token }) {
