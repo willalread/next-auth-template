@@ -29,8 +29,8 @@ export function LoginForm() {
       ? "Email already in use with a different provider."
       : undefined
 
-  const [errorMessage, setErrorMessage] = useState<string | undefined>()
-  const [successMessage, setSuccessMessage] = useState<string | undefined>()
+  const [success, setSuccess] = useState<string | undefined>()
+  const [error, setError] = useState<string | undefined>()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<LoginSchema>({
@@ -42,14 +42,18 @@ export function LoginForm() {
   })
 
   function handleSubmit(values: LoginSchema) {
-    setErrorMessage(undefined)
-    setSuccessMessage(undefined)
+    setError(undefined)
+    setSuccess(undefined)
 
     startTransition(() => {
-      login(values, callbackUrl).then((result) => {
-        setErrorMessage(result?.error)
-        setSuccessMessage(result?.success)
-      })
+      login(values, callbackUrl)
+        .then((result) => {
+          setSuccess(result?.success)
+          setError(result?.error)
+        })
+        .catch(() => {
+          setError("Something went wrong.")
+        })
     })
   }
 
@@ -110,8 +114,8 @@ export function LoginForm() {
               )}
             />
           </div>
-          <FormError message={errorMessage || urlError} />
-          <FormSuccess message={successMessage} />
+          <FormSuccess message={success} />
+          {!success && <FormError message={error || urlError} />}
           <Button disabled={isPending} type="submit" className="w-full">
             Login
           </Button>

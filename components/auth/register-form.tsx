@@ -20,8 +20,8 @@ import {
 import { Input } from "@/components/ui/input"
 
 export function RegisterForm() {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>()
-  const [successMessage, setSuccessMessage] = useState<string | undefined>()
+  const [success, setSuccess] = useState<string | undefined>()
+  const [error, setError] = useState<string | undefined>()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<RegisterSchema>({
@@ -34,14 +34,18 @@ export function RegisterForm() {
   })
 
   function handleSubmit(values: RegisterSchema) {
-    setErrorMessage(undefined)
-    setSuccessMessage(undefined)
+    setError(undefined)
+    setSuccess(undefined)
 
     startTransition(() => {
-      register(values).then((result) => {
-        setErrorMessage(result.error)
-        setSuccessMessage(result.success)
-      })
+      register(values)
+        .then((result) => {
+          setSuccess(result.success)
+          setError(result.error)
+        })
+        .catch(() => {
+          setError("Something went wrong.")
+        })
     })
   }
 
@@ -112,8 +116,8 @@ export function RegisterForm() {
               )}
             />
           </div>
-          <FormError message={errorMessage} />
-          <FormSuccess message={successMessage} />
+          <FormSuccess message={success} />
+          {!success && <FormError message={error} />}
           <Button disabled={isPending} type="submit" className="w-full">
             Register
           </Button>
