@@ -13,9 +13,9 @@ export default middleware((req) => {
   }
 
   const isAuthRoute = [
+    "/auth/error",
     "/auth/login",
     "/auth/register",
-    "/auth/error",
     "/auth/forgot-password",
     "/auth/reset-password",
   ].includes(nextUrl.pathname)
