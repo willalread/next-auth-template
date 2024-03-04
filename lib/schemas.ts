@@ -7,7 +7,13 @@ export const loginSchema = z.object({
   password: z.string().trim().min(1, {
     message: "Password is required.",
   }),
-  code: z.string().optional(),
+  code: z
+    .string()
+    .trim()
+    .length(6, {
+      message: "Code must be 6 characters.",
+    })
+    .optional(),
 })
 
 export type LoginSchema = z.infer<typeof loginSchema>

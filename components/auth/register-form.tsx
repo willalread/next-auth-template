@@ -20,8 +20,8 @@ import {
 import { Input } from "@/components/ui/input"
 
 export function RegisterForm() {
-  const [success, setSuccess] = useState<string | undefined>()
   const [error, setError] = useState<string | undefined>()
+  const [success, setSuccess] = useState<string | undefined>()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<RegisterSchema>({
@@ -40,8 +40,8 @@ export function RegisterForm() {
     startTransition(() => {
       register(values)
         .then((result) => {
-          setSuccess(result.success)
           setError(result.error)
+          setSuccess(result.success)
         })
         .catch(() => {
           setError("Something went wrong.")

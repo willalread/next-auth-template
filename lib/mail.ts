@@ -25,3 +25,12 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
   })
 }
+
+export async function sendTwoFactorTokenEmail(email: string, token: string) {
+  await resend.emails.send({
+    from: "mail@kratoform.com",
+    to: email,
+    subject: "Two Factor Code",
+    html: `<p>Your code is: <strong>${token}</strong></p>`,
+  })
+}

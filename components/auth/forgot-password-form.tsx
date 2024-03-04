@@ -38,8 +38,8 @@ export function ForgotPasswordForm() {
     startTransition(() => {
       forgotPassword(values)
         .then((result) => {
-          setSuccess(result.success)
           setError(result.error)
+          setSuccess(result.success)
         })
         .catch(() => {
           setError("Something went wrong.")

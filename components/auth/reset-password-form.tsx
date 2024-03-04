@@ -42,8 +42,8 @@ export function ResetPasswordForm() {
     startTransition(() => {
       resetPassword(values, token)
         .then((result) => {
-          setSuccess(result.success)
           setError(result.error)
+          setSuccess(result.success)
         })
         .catch(() => {
           setError("Something went wrong.")

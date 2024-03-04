@@ -5,6 +5,7 @@ import { UserRole } from "@prisma/client"
 
 import authConfig from "@/auth.config"
 import { db } from "@/lib/db"
+import { getTwoFactorConfirmationByUserId } from "@/lib/data/two-factor-confirmation"
 import { getUserById } from "@/lib/data/user"
 
 declare module "next-auth" {
@@ -49,7 +50,19 @@ export const {
       // Prevent sign in without email verification
       if (!currentUser?.emailVerified) return false
 
-      // TODO: Add 2FA check
+      // Prevent sign in without 2FA verification
+      if (currentUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          currentUser.id,
+        )
+
+        if (!twoFactorConfirmation) return false
+
+        // Delete 2FA confirmation after successful sign in
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        })
+      }
 
       return true
     },
