@@ -14,3 +14,14 @@ export async function sendVerificationEmail(email: string, token: string) {
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>`,
   })
 }
+
+export async function sendPasswordResetEmail(email: string, token: string) {
+  const resetLink = `${domain}/auth/reset-password?token=${token}`
+
+  await resend.emails.send({
+    from: "mail@kratoform.com",
+    to: email,
+    subject: "Reset your password",
+    html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+  })
+}
