@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { resetPassword } from "@/lib/actions/reset-password"
 import { resetPasswordSchema, type ResetPasswordSchema } from "@/lib/schemas"
 import { CardWrapper } from "@/components/auth/card-wrapper"
-import { FormError, FormSuccess } from "@/components/form-status"
+import { ErrorMessage, SuccessMessage } from "@/components/status-message"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -21,8 +21,8 @@ import {
 import { Input } from "@/components/ui/input"
 
 export function ResetPasswordForm() {
-  const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
+  const [error, setError] = useState<string | undefined>()
   const [isPending, startTransition] = useTransition()
 
   const searchParams = useSearchParams()
@@ -41,9 +41,9 @@ export function ResetPasswordForm() {
 
     startTransition(() => {
       resetPassword(values, token)
-        .then((result) => {
-          setError(result.error)
-          setSuccess(result.success)
+        .then((data) => {
+          setSuccess(data.success)
+          setError(data.error)
         })
         .catch(() => {
           setError("Something went wrong.")
@@ -79,8 +79,8 @@ export function ResetPasswordForm() {
               </FormItem>
             )}
           />
-          <FormSuccess message={success} />
-          {!success && <FormError message={error} />}
+          <SuccessMessage message={success} />
+          {!success && <ErrorMessage message={error} />}
           <Button disabled={isPending} type="submit" className="w-full">
             Reset password
           </Button>

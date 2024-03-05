@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { login } from "@/lib/actions/login"
 import { loginSchema, type LoginSchema } from "@/lib/schemas"
 import { CardWrapper } from "@/components/auth/card-wrapper"
-import { FormError, FormSuccess } from "@/components/form-status"
+import { ErrorMessage, SuccessMessage } from "@/components/status-message"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -22,8 +22,8 @@ import {
 import { Input } from "@/components/ui/input"
 
 export function LoginForm() {
-  const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
+  const [error, setError] = useState<string | undefined>()
   const [showTwoFactor, setShowTwoFactor] = useState(false)
   const [isPending, startTransition] = useTransition()
 
@@ -49,11 +49,12 @@ export function LoginForm() {
 
     startTransition(() => {
       login(values, callbackUrl)
-        .then((result) => {
-          setError(result?.error)
-          setSuccess(result?.success)
-          if (result?.twoFactor) {
-            setShowTwoFactor(result.twoFactor)
+        .then((data) => {
+          setSuccess(data?.success)
+          setError(data?.error)
+
+          if (data?.twoFactor) {
+            setShowTwoFactor(data.twoFactor)
             form.setValue("code", "")
           }
         })
@@ -141,8 +142,8 @@ export function LoginForm() {
               />
             </div>
           )}
-          <FormSuccess message={success} />
-          {!success && <FormError message={error || urlError} />}
+          <SuccessMessage message={success} />
+          {!success && <ErrorMessage message={error || urlError} />}
           <Button disabled={isPending} type="submit" className="w-full">
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>

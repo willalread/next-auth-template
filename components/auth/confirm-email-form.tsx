@@ -6,7 +6,7 @@ import { BeatLoader } from "react-spinners"
 
 import { confirmEmail } from "@/lib/actions/confirm-email"
 import { CardWrapper } from "@/components/auth/card-wrapper"
-import { FormError } from "@/components/form-status"
+import { ErrorMessage } from "@/components/status-message"
 
 export function ConfirmEmailForm() {
   const [error, setError] = useState<string | undefined>()
@@ -22,11 +22,11 @@ export function ConfirmEmailForm() {
     }
 
     confirmEmail(token)
-      .then((result) => {
-        if (result.success) {
+      .then((data) => {
+        if (data.success) {
           router.push("/auth/login")
         } else {
-          setError(result.error)
+          setError(data.error)
         }
       })
       .catch(() => {
@@ -47,7 +47,7 @@ export function ConfirmEmailForm() {
       }}
     >
       <div className="flex justify-center">
-        {error ? <FormError message={error} /> : <BeatLoader />}
+        {error ? <ErrorMessage message={error} /> : <BeatLoader />}
       </div>
     </CardWrapper>
   )

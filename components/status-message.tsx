@@ -3,7 +3,7 @@ import {
   ExclamationTriangleIcon,
 } from "@radix-ui/react-icons"
 
-export function FormError({ message }: { message?: string }) {
+export function ErrorMessage({ message }: { message?: string }) {
   if (!message) return null
 
   return (
@@ -14,7 +14,7 @@ export function FormError({ message }: { message?: string }) {
   )
 }
 
-export function FormSuccess({ message }: { message?: string }) {
+export function SuccessMessage({ message }: { message?: string }) {
   if (!message) return null
 
   return (
