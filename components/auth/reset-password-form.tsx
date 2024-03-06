@@ -36,8 +36,8 @@ export function ResetPasswordForm() {
   })
 
   function handleSubmit(values: ResetPasswordSchema) {
-    setError(undefined)
     setSuccess(undefined)
+    setError(undefined)
 
     startTransition(() => {
       resetPassword(values, token)

@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { type User } from "next-auth"
 import "next-auth/jwt"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { UserRole } from "@prisma/client"
@@ -6,12 +6,19 @@ import { UserRole } from "@prisma/client"
 import authConfig from "@/auth.config"
 import { db } from "@/lib/db"
 import { getTwoFactorConfirmationByUserId } from "@/lib/data/two-factor-confirmation"
+import { getAccountByUserId } from "@/lib/data/account"
 import { getUserById } from "@/lib/data/user"
 
+export type ExtendedUser = User & {
+  id: string
+  role: UserRole
+  isTwoFactorEnabled: boolean
+  isOAuth: boolean
+}
+
 declare module "next-auth" {
-  interface User {
-    role: UserRole
-    isTwoFactorEnabled: boolean
+  interface Session {
+    user: ExtendedUser
   }
 }
 
@@ -19,6 +26,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     role: UserRole
     isTwoFactorEnabled: boolean
+    isOAuth: boolean
   }
 }
 
@@ -71,8 +79,11 @@ export const {
     async session({ session, token }) {
       if (session.user && token.sub) {
         session.user.id = token.sub
+        session.user.name = token.name
+        session.user.email = token.email as string
         session.user.role = token.role
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled
+        session.user.isOAuth = token.isOAuth
       }
 
       return session
@@ -82,8 +93,13 @@ export const {
         const currentUser = await getUserById(token.sub)
 
         if (currentUser) {
+          const account = await getAccountByUserId(currentUser.id)
+
+          token.name = currentUser.name
+          token.email = currentUser.email
           token.role = currentUser.role
           token.isTwoFactorEnabled = currentUser.isTwoFactorEnabled
+          token.isOAuth = !!account
         }
       }
 

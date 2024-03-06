@@ -23,7 +23,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className={inter.className}>
-          <main className="flex min-h-screen flex-col items-center justify-center gap-8">
+          <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-4 sm:p-8">
             {children}
           </main>
           <Toaster />

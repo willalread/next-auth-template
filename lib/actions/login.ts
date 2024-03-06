@@ -18,7 +18,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
   const result = loginSchema.safeParse(values)
 
   if (!result.success) {
-    return { error: "Invalid form values." }
+    return { error: "Invalid login values." }
   }
 
   const { email, password, code } = result.data

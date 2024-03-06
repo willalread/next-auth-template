@@ -34,8 +34,8 @@ export function RegisterForm() {
   })
 
   function handleSubmit(values: RegisterSchema) {
-    setError(undefined)
     setSuccess(undefined)
+    setError(undefined)
 
     startTransition(() => {
       register(values)

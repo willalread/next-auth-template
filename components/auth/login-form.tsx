@@ -44,8 +44,8 @@ export function LoginForm() {
   })
 
   function handleSubmit(values: LoginSchema) {
-    setError(undefined)
     setSuccess(undefined)
+    setError(undefined)
 
     startTransition(() => {
       login(values, callbackUrl)

@@ -32,8 +32,8 @@ export function ForgotPasswordForm() {
   })
 
   function handleSubmit(values: ForgotPasswordSchema) {
-    setError(undefined)
     setSuccess(undefined)
+    setError(undefined)
 
     startTransition(() => {
       forgotPassword(values)

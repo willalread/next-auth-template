@@ -1,11 +1,10 @@
-import type { User } from "next-auth"
-
+import type { ExtendedUser } from "@/auth"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface UserInfoProps {
   label: string
-  user?: User
+  user?: ExtendedUser
 }
 
 export function UserInfo({ label, user }: UserInfoProps) {

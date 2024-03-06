@@ -14,7 +14,7 @@ export async function resetPassword(
   const result = resetPasswordSchema.safeParse(values)
 
   if (!result.success) {
-    return { error: "Invalid form values." }
+    return { error: "Invalid password." }
   }
 
   const { password } = result.data

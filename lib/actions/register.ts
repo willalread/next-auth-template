@@ -12,7 +12,7 @@ export async function register(values: RegisterSchema) {
   const result = registerSchema.safeParse(values)
 
   if (!result.success) {
-    return { error: "Invalid form values." }
+    return { error: "Invalid register values." }
   }
 
   const { name, email, password } = result.data
