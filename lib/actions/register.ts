@@ -36,5 +36,5 @@ export async function register(values: RegisterSchema) {
 
   await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-  return { success: "Confirmation email sent." }
+  return { success: "Verification email sent." }
 }

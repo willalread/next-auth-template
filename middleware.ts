@@ -27,7 +27,7 @@ export default middleware((req) => {
     return
   }
 
-  const isPublicRoute = ["/", "/auth/confirm-email"].includes(nextUrl.pathname)
+  const isPublicRoute = ["/", "/auth/verify-email"].includes(nextUrl.pathname)
 
   if (!isLoggedIn && !isPublicRoute) {
     let callbackUrl = nextUrl.pathname

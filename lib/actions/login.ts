@@ -37,7 +37,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
       verificationToken.token,
     )
 
-    return { success: "Confirmation email sent." }
+    return { success: "Verification email sent." }
   }
 
   if (user.isTwoFactorEnabled) {

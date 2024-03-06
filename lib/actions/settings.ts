@@ -56,7 +56,7 @@ export async function settings(values: SettingsSchema) {
 
     await sendVerificationEmail(email, verificationToken.token)
 
-    success = "Confirmation email set."
+    success = "Verification email set."
   }
 
   if (password && newPassword && user.password) {

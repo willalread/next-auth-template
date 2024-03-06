@@ -5,32 +5,32 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const domain = process.env.NEXT_PUBLIC_APP_URL
 
 export async function sendVerificationEmail(email: string, token: string) {
-  const confirmLink = `${domain}/auth/confirm-email?token=${token}`
+  const link = `${domain}/auth/verify-email?token=${token}`
 
   await resend.emails.send({
-    from: "mail@kratoform.com",
+    from: "Security <security@kratoform.com>",
     to: email,
-    subject: "Confirm your email",
-    html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>`,
+    subject: "Verify your email",
+    html: `<p>Click <a href="${link}">here</a> to verify your email.</p>`,
   })
 }
 
 export async function sendPasswordResetEmail(email: string, token: string) {
-  const resetLink = `${domain}/auth/reset-password?token=${token}`
+  const link = `${domain}/auth/reset-password?token=${token}`
 
   await resend.emails.send({
-    from: "mail@kratoform.com",
+    from: "Security <security@kratoform.com>",
     to: email,
     subject: "Reset your password",
-    html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+    html: `<p>Click <a href="${link}">here</a> to reset your password.</p>`,
   })
 }
 
-export async function sendTwoFactorTokenEmail(email: string, token: string) {
+export async function sendTwoFactorTokenEmail(email: string, code: string) {
   await resend.emails.send({
-    from: "mail@kratoform.com",
+    from: "Security <security@kratoform.com>",
     to: email,
-    subject: "Two Factor Code",
-    html: `<p>Your code is: <strong>${token}</strong></p>`,
+    subject: "MFA Code",
+    html: `<p>Your code is: <strong>${code}</strong></p>`,
   })
 }

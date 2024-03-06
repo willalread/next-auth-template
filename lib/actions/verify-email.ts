@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 import { getVerificationTokenByToken } from "@/lib/data/verification-token"
 import { getUserByEmail } from "@/lib/data/user"
 
-export async function confirmEmail(token: string) {
+export async function verifyEmail(token: string) {
   const verificationToken = await getVerificationTokenByToken(token)
 
   if (!verificationToken) {
@@ -35,5 +35,5 @@ export async function confirmEmail(token: string) {
     where: { id: verificationToken.id },
   })
 
-  return { success: "Email confirmed." }
+  return { success: "Email verified." }
 }
