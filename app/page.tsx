@@ -8,7 +8,7 @@ export default function Home() {
         🔐 Auth
       </h1>
       <div>
-        <LoginButton asChild>
+        <LoginButton>
           <Button variant="secondary" size="lg">
             Login
           </Button>
