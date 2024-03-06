@@ -14,7 +14,6 @@ import {
   CardDescription,
   CardHeader,
   CardFooter,
-  CardTitle,
 } from "@/components/ui/card"
 
 interface CardWrapperProps {
@@ -43,10 +42,10 @@ export function CardWrapper({
   return (
     <Card className="w-full max-w-[400px]">
       <CardHeader>
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <BsShieldLockFill size={30} />
           <h1 className="text-3xl font-semibold">Auth</h1>
-        </div>
+        </Link>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
