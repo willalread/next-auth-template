@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
+import { BsShieldLockFill } from "react-icons/bs"
 import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 
@@ -36,15 +37,16 @@ export function CardWrapper({
   const callbackUrl = searchParams.get("callbackUrl")
 
   function handleSocialAuth(provider: "google" | "github") {
-    signIn(provider, { callbackUrl: callbackUrl || "/settings" })
+    signIn(provider, { callbackUrl: callbackUrl || "/server" })
   }
 
   return (
-    <Card className="w-full max-w-[400px] overflow-hidden shadow-md">
-      <CardHeader className="items-center">
-        <CardTitle className="text-3xl leading-normal tracking-normal">
-          🔐 Auth
-        </CardTitle>
+    <Card className="w-full max-w-[400px]">
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <BsShieldLockFill size={30} />
+          <h1 className="text-3xl font-semibold">Auth</h1>
+        </div>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">

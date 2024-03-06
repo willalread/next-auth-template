@@ -1,5 +1,6 @@
 "use client"
 
+import { LuKeyRound } from "react-icons/lu"
 import { UserRole } from "@prisma/client"
 import { toast } from "sonner"
 
@@ -34,11 +35,12 @@ export default function AdminPage() {
   }
 
   return (
-    <Card className="w-full max-w-[600px] overflow-hidden shadow-md">
-      <CardHeader className="items-center">
-        <CardTitle className="text-2xl leading-normal tracking-normal">
-          🔑 Admin
-        </CardTitle>
+    <Card className="w-full max-w-[600px]">
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <LuKeyRound size={24} />
+          <CardTitle>Admin</CardTitle>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <RoleGate allowedRole={UserRole.ADMIN}>
@@ -61,7 +63,7 @@ interface ContentItemProps {
 
 function ContentItem({ label, onClick }: ContentItemProps) {
   return (
-    <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-md">
+    <div className="flex flex-row items-center justify-between overflow-hidden rounded-md border p-3 shadow-sm">
       <p className="text-sm font-medium">{label}</p>
       <Button onClick={onClick}>Click to test</Button>
     </div>

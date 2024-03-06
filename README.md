@@ -1,1 +1,1 @@
-This is a Next Auth template.
+This is a Auth.js v5 template.

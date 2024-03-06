@@ -83,7 +83,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: callbackUrl || "/settings",
+      redirectTo: callbackUrl || "/server",
     })
   } catch (error) {
     if (error instanceof AuthError) {

@@ -1,9 +1,11 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { SessionProvider } from "next-auth/react"
+import { Analytics } from "@vercel/analytics/react"
 
 import "./globals.css"
 import { auth } from "@/auth"
+import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -21,12 +23,13 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-4 sm:p-8">
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             {children}
-          </main>
-          <Toaster />
+            <Toaster />
+          </ThemeProvider>
+          <Analytics />
         </body>
       </html>
     </SessionProvider>

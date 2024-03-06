@@ -81,7 +81,7 @@ export function LoginForm() {
               name="code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Two Factor Code</FormLabel>
+                  <FormLabel>MFA Code</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isPending}

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
+import { LuSettings } from "react-icons/lu"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSession } from "next-auth/react"
@@ -75,11 +76,12 @@ export default function SettingsPage() {
   }
 
   return (
-    <Card className="w-full max-w-[600px] overflow-hidden shadow-md">
-      <CardHeader className="items-center">
-        <CardTitle className="text-2xl leading-normal tracking-normal">
-          ⚙️ Settings
-        </CardTitle>
+    <Card className="w-full max-w-[600px]">
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <LuSettings size={24} />
+          <CardTitle>Settings</CardTitle>
+        </div>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -191,11 +193,11 @@ export default function SettingsPage() {
                     control={form.control}
                     name="isTwoFactorEnabled"
                     render={({ field }) => (
-                      <FormItem className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+                      <FormItem className="flex items-center justify-between overflow-hidden rounded-md border p-3 shadow-sm">
                         <div className="space-y-0.5">
-                          <FormLabel>Two Factor Authentication</FormLabel>
+                          <FormLabel>MFA</FormLabel>
                           <FormDescription>
-                            Enable two factor authentication for your account?
+                            Enable multi-factor authentication for your account?
                           </FormDescription>
                         </div>
                         <FormControl>

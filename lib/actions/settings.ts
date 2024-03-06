@@ -31,6 +31,7 @@ export async function settings(values: SettingsSchema) {
     return { error: "Unauthorized" }
   }
 
+  let emailVerified = user.emailVerified
   let success = "Settings updated."
 
   if (authUser.isOAuth) {
@@ -56,6 +57,7 @@ export async function settings(values: SettingsSchema) {
 
     await sendVerificationEmail(email, verificationToken.token)
 
+    emailVerified = null
     success = "Verification email set."
   }
 
@@ -76,6 +78,7 @@ export async function settings(values: SettingsSchema) {
       role,
       name,
       email,
+      emailVerified,
       password,
       isTwoFactorEnabled,
     },
