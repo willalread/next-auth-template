@@ -4,6 +4,8 @@ import { AuthError } from "next-auth"
 
 import { signIn } from "@/auth"
 import { db } from "@/lib/db"
+import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail"
+import { loginSchema, type LoginSchema } from "@/lib/schemas"
 import { getTwoFactorConfirmationByUserId } from "@/lib/data/two-factor-confirmation"
 import {
   createTwoFactorToken,
@@ -11,8 +13,6 @@ import {
 } from "@/lib/data/two-factor-token"
 import { createVerificationToken } from "@/lib/data/verification-token"
 import { getUserByEmail } from "@/lib/data/user"
-import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail"
-import { loginSchema, type LoginSchema } from "@/lib/schemas"
 
 export async function login(values: LoginSchema, callbackUrl: string | null) {
   const result = loginSchema.safeParse(values)
@@ -83,7 +83,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: callbackUrl || "/server",
+      redirectTo: callbackUrl || "/user-info",
     })
   } catch (error) {
     if (error instanceof AuthError) {

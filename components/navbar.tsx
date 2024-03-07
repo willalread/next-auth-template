@@ -3,10 +3,11 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
+import type { User } from "@/lib/auth"
 import { UserButton } from "@/components/auth/user-button"
 import { Button } from "@/components/ui/button"
 
-export function Navbar() {
+export function Navbar({ user }: { user: User }) {
   const pathname = usePathname()
 
   return (
@@ -14,15 +15,9 @@ export function Navbar() {
       <div className="flex gap-2">
         <Button
           asChild
-          variant={pathname === "/server" ? "default" : "outline"}
+          variant={pathname === "/user-info" ? "default" : "outline"}
         >
-          <Link href="/server">Server</Link>
-        </Button>
-        <Button
-          asChild
-          variant={pathname === "/client" ? "default" : "outline"}
-        >
-          <Link href="/client">Client</Link>
+          <Link href="/user-info">User Info</Link>
         </Button>
         <Button asChild variant={pathname === "/admin" ? "default" : "outline"}>
           <Link href="/admin">Admin</Link>
@@ -34,7 +29,7 @@ export function Navbar() {
           <Link href="/settings">Settings</Link>
         </Button>
       </div>
-      <UserButton />
+      <UserButton user={user} />
     </nav>
   )
 }

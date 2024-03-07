@@ -3,9 +3,9 @@
 import bcrypt from "bcryptjs"
 
 import { db } from "@/lib/db"
+import { resetPasswordSchema, type ResetPasswordSchema } from "@/lib/schemas"
 import { getPasswordResetTokenByToken } from "@/lib/data/password-reset-token"
 import { getUserByEmail } from "@/lib/data/user"
-import { resetPasswordSchema, type ResetPasswordSchema } from "@/lib/schemas"
 
 export async function resetPassword(
   values: ResetPasswordSchema,

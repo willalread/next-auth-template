@@ -1,9 +1,9 @@
 "use server"
 
-import { createPasswordResetToken } from "@/lib/data/password-reset-token"
-import { getUserByEmail } from "@/lib/data/user"
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { forgotPasswordSchema, type ForgotPasswordSchema } from "@/lib/schemas"
+import { createPasswordResetToken } from "@/lib/data/password-reset-token"
+import { getUserByEmail } from "@/lib/data/user"
 
 export async function forgotPassword(values: ForgotPasswordSchema) {
   const result = forgotPasswordSchema.safeParse(values)

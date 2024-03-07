@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { resetPassword } from "@/lib/actions/reset-password"
 import { resetPasswordSchema, type ResetPasswordSchema } from "@/lib/schemas"
-import { CardWrapper } from "@/components/auth/card-wrapper"
 import { ErrorMessage, SuccessMessage } from "@/components/status-message"
 import { Button } from "@/components/ui/button"
 import {
@@ -52,40 +51,32 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <CardWrapper
-      description="Reset your password"
-      backButton={{
-        href: "/auth/login",
-        label: "Back to login",
-      }}
-    >
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    placeholder="********"
-                    type="password"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <SuccessMessage message={success} />
-          {!success && <ErrorMessage message={error} />}
-          <Button disabled={isPending} type="submit" className="w-full">
-            Reset password
-          </Button>
-        </form>
-      </Form>
-    </CardWrapper>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  disabled={isPending}
+                  placeholder="********"
+                  type="password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <SuccessMessage message={success} />
+        {!success && <ErrorMessage message={error} />}
+        <Button disabled={isPending} type="submit" className="w-full">
+          Reset password
+        </Button>
+      </form>
+    </Form>
   )
 }

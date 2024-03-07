@@ -3,8 +3,8 @@
 import { ExitIcon } from "@radix-ui/react-icons"
 import { FaUser } from "react-icons/fa"
 
+import type { User } from "@/lib/auth"
 import { logout } from "@/lib/actions/logout"
-import { useCurrentUser } from "@/lib/hooks/auth"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -13,14 +13,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export function UserButton() {
-  const user = useCurrentUser()
-
+export function UserButton({ user }: { user: User }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src={user?.image || ""} />
+          <AvatarImage src={user.image || ""} />
           <AvatarFallback className="bg-background">
             <FaUser />
           </AvatarFallback>

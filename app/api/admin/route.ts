@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server"
 import { UserRole } from "@prisma/client"
 
-import { currentRole } from "@/lib/auth"
+import { currentUser } from "@/lib/auth"
 
 export async function GET() {
-  const role = await currentRole()
+  const { role } = await currentUser()
 
   if (role === UserRole.ADMIN) {
     return NextResponse.json("Allowed API Route", { status: 200 })

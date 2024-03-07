@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { SessionProvider } from "next-auth/react"
 import { Analytics } from "@vercel/analytics/react"
 
 import "./globals.css"
-import { auth } from "@/auth"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 
@@ -19,19 +17,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await auth()
-
   return (
-    <SessionProvider session={session}>
-      <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            {children}
-            <Toaster />
-          </ThemeProvider>
-          <Analytics />
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          {children}
+          <Toaster />
+        </ThemeProvider>
+        <Analytics />
+      </body>
+    </html>
   )
 }

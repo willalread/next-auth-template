@@ -3,10 +3,10 @@
 import bcrypt from "bcryptjs"
 
 import { db } from "@/lib/db"
-import { createVerificationToken } from "@/lib/data/verification-token"
-import { getUserByEmail } from "@/lib/data/user"
 import { sendVerificationEmail } from "@/lib/mail"
 import { registerSchema, type RegisterSchema } from "@/lib/schemas"
+import { createVerificationToken } from "@/lib/data/verification-token"
+import { getUserByEmail } from "@/lib/data/user"
 
 export async function register(values: RegisterSchema) {
   const result = registerSchema.safeParse(values)
@@ -16,13 +16,14 @@ export async function register(values: RegisterSchema) {
   }
 
   const { name, email, password } = result.data
-  const hashedPassword = await bcrypt.hash(password, 10)
 
   const existingUser = await getUserByEmail(email)
 
   if (existingUser) {
     return { error: "Email already in use." }
   }
+
+  const hashedPassword = await bcrypt.hash(password, 10)
 
   await db.user.create({
     data: {

@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { BeatLoader } from "react-spinners"
 
 import { verifyEmail } from "@/lib/actions/verify-email"
-import { CardWrapper } from "@/components/auth/card-wrapper"
 import { ErrorMessage } from "@/components/status-message"
 
 export function VerifyEmailForm() {
@@ -39,16 +38,8 @@ export function VerifyEmailForm() {
   }, [handleVerifyEmail])
 
   return (
-    <CardWrapper
-      description="Verifying your email"
-      backButton={{
-        href: "/auth/login",
-        label: "Back to login",
-      }}
-    >
-      <div className="flex justify-center">
-        {error ? <ErrorMessage message={error} /> : <BeatLoader />}
-      </div>
-    </CardWrapper>
+    <div className="flex justify-center">
+      {error ? <ErrorMessage message={error} /> : <BeatLoader />}
+    </div>
   )
 }

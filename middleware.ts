@@ -22,7 +22,7 @@ export default middleware((req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL("/server", nextUrl))
+      return Response.redirect(new URL("/user-info", nextUrl))
     }
     return
   }
