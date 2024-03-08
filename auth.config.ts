@@ -28,7 +28,7 @@ export default {
         const passwordsMatch = await bcrypt.compare(password, user.password)
         if (!passwordsMatch) return null
 
-        if (user.isTwoFactorEnabled) {
+        if (user.twoFactorEnabled) {
           const twoFactorToken = await db.twoFactorToken.findUnique({
             where: { email: user.email },
           })

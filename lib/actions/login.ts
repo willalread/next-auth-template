@@ -29,7 +29,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
   const passwordsMatch = await bcrypt.compare(password, user.password)
   if (!passwordsMatch) return { error: "Invalid password." }
 
-  if (user.isTwoFactorEnabled) {
+  if (user.twoFactorEnabled) {
     if (!code) {
       await sendTwoFactorTokenEmail(user.email)
       return { twoFactor: true }

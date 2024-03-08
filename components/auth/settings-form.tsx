@@ -45,7 +45,7 @@ export function SettingsForm({ user }: { user: User }) {
       email: user.email || "",
       password: undefined,
       newPassword: undefined,
-      isTwoFactorEnabled: user.isTwoFactorEnabled,
+      twoFactorEnabled: user.twoFactorEnabled,
     },
   })
 
@@ -185,7 +185,7 @@ export function SettingsForm({ user }: { user: User }) {
                   />
                   <FormField
                     control={form.control}
-                    name="isTwoFactorEnabled"
+                    name="twoFactorEnabled"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-between overflow-hidden rounded-md border p-3 shadow-sm">
                         <div className="space-y-0.5">

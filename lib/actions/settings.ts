@@ -12,7 +12,7 @@ export async function settings(values: SettingsSchema) {
   const result = settingsSchema.safeParse(values)
   if (!result.success) return { error: "Invalid settings values." }
 
-  let { role, name, email, password, newPassword, isTwoFactorEnabled } =
+  let { role, name, email, password, newPassword, twoFactorEnabled } =
     result.data
 
   const user = await currentUser()
@@ -61,7 +61,7 @@ export async function settings(values: SettingsSchema) {
       email,
       emailVerified,
       password,
-      isTwoFactorEnabled,
+      twoFactorEnabled,
     },
   })
 

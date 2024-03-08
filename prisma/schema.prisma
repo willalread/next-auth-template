@@ -13,14 +13,14 @@ enum UserRole {
 }
 
 model User {
-  id                 String    @id @default(cuid())
-  name               String?
-  email              String?   @unique
-  emailVerified      DateTime?
-  password           String?
-  image              String?
-  role               UserRole  @default(USER)
-  isTwoFactorEnabled Boolean   @default(false)
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  password         String?
+  image            String?
+  role             UserRole  @default(USER)
+  twoFactorEnabled Boolean   @default(false)
 
   accounts Account[]
 }

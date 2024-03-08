@@ -72,7 +72,7 @@ export const settingsSchema = z
         message: "New password must be at least 8 characters.",
       })
       .optional(),
-    isTwoFactorEnabled: z.boolean(),
+    twoFactorEnabled: z.boolean(),
   })
   .refine(
     (data) => {

@@ -21,8 +21,8 @@ export default async function UserInfoPage() {
         <InfoItem label="Email" value={user.email} />
         <InfoItem label="Role" value={user.role} />
         <InfoItem label="MFA">
-          <Badge variant={user.isTwoFactorEnabled ? "success" : "destructive"}>
-            {user.isTwoFactorEnabled ? "ON" : "OFF"}
+          <Badge variant={user.twoFactorEnabled ? "success" : "destructive"}>
+            {user.twoFactorEnabled ? "ON" : "OFF"}
           </Badge>
         </InfoItem>
       </CardContent>
