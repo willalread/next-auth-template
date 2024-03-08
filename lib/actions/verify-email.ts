@@ -8,21 +8,13 @@ export async function verifyEmail(token: string) {
     where: { token },
   })
 
-  if (!verificationToken) {
-    return { error: "Token does not exist." }
-  }
+  if (!verificationToken) return { error: "Token does not exist." }
 
   const hasExpired = new Date(verificationToken.expiresAt) < new Date()
-
-  if (hasExpired) {
-    return { error: "Token has expired." }
-  }
+  if (hasExpired) return { error: "Token has expired." }
 
   const user = await getUserByEmail(verificationToken.email)
-
-  if (!user) {
-    return { error: "Email does not exist." }
-  }
+  if (!user) return { error: "Email does not exist." }
 
   await db.user.update({
     where: { id: user.id },

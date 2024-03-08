@@ -22,8 +22,7 @@ model User {
   role               UserRole  @default(USER)
   isTwoFactorEnabled Boolean   @default(false)
 
-  twoFactorConfirmation TwoFactorConfirmation?
-  accounts              Account[]
+  accounts Account[]
 }
 
 model Account {
@@ -64,11 +63,4 @@ model TwoFactorToken {
   email     String   @unique
   token     String   @unique
   expiresAt DateTime
-}
-
-model TwoFactorConfirmation {
-  id     String @id @default(cuid())
-  userId String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

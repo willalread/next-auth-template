@@ -6,37 +6,44 @@ import Google from "next-auth/providers/google"
 
 import { db } from "@/lib/db"
 import { loginSchema } from "@/lib/schemas"
+import { getUserByEmail } from "@/lib/user"
 
 export default {
   providers: [
     Credentials({
       async authorize(credentials) {
+        if (credentials.code === "undefined") credentials.code = undefined
+
         const result = loginSchema.safeParse(credentials)
+        if (!result.success) return null
 
-        if (result.success) {
-          const { email, password } = result.data
+        const { email, password, code } = result.data
 
-          const user = await db.user.findUnique({
-            where: { email },
-            include: { twoFactorConfirmation: true },
-          })
+        const user = await getUserByEmail(email)
 
-          if (!user || !user.emailVerified || !user.password) return null
-
-          if (user.isTwoFactorEnabled) {
-            if (!user.twoFactorConfirmation) return null
-
-            await db.twoFactorConfirmation.delete({
-              where: { id: user.twoFactorConfirmation.id },
-            })
-          }
-
-          const passwordsMatch = await bcrypt.compare(password, user.password)
-
-          if (passwordsMatch) return user
+        if (!user || !user.email || !user.emailVerified || !user.password) {
+          return null
         }
 
-        return null
+        const passwordsMatch = await bcrypt.compare(password, user.password)
+        if (!passwordsMatch) return null
+
+        if (user.isTwoFactorEnabled) {
+          const twoFactorToken = await db.twoFactorToken.findUnique({
+            where: { email: user.email },
+          })
+
+          if (!twoFactorToken || twoFactorToken.token !== code) return null
+
+          const hasExpired = new Date(twoFactorToken.expiresAt) < new Date()
+          if (hasExpired) return null
+
+          await db.twoFactorToken.delete({
+            where: { id: twoFactorToken.id },
+          })
+        }
+
+        return user
       },
     }),
     Github({

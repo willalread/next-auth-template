@@ -6,10 +6,7 @@ import { getUserByEmail } from "@/lib/user"
 
 export async function forgotPassword(values: ForgotPasswordSchema) {
   const result = forgotPasswordSchema.safeParse(values)
-
-  if (!result.success) {
-    return { error: "Invalid email." }
-  }
+  if (!result.success) return { error: "Invalid email." }
 
   const { email } = result.data
 

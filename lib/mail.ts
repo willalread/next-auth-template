@@ -33,7 +33,7 @@ export async function sendVerificationEmail(email: string) {
   const link = `${domain}/auth/verify-email?token=${verificationToken.token}`
 
   await resend.emails.send({
-    from: "Security <security@kratoform.com>",
+    from: "Auth Security <security@kratoform.com>",
     to: email,
     subject: "Verify your email",
     html: `<p>Click <a href="${link}">here</a> to verify your email.</p>`,
@@ -67,7 +67,7 @@ export async function sendPasswordResetEmail(email: string) {
   const link = `${domain}/auth/reset-password?token=${passwordResetToken.token}`
 
   await resend.emails.send({
-    from: "Security <security@kratoform.com>",
+    from: "Auth Security <security@kratoform.com>",
     to: email,
     subject: "Reset your password",
     html: `<p>Click <a href="${link}">here</a> to reset your password.</p>`,
@@ -101,7 +101,7 @@ export async function sendTwoFactorTokenEmail(email: string) {
   const code = twoFactorToken.token
 
   await resend.emails.send({
-    from: "Security <security@kratoform.com>",
+    from: "Auth Security <security@kratoform.com>",
     to: email,
     subject: "MFA Code",
     html: `<p>Your code is: <strong>${code}</strong></p>`,

@@ -11,36 +11,23 @@ export async function resetPassword(
   token: string | null,
 ) {
   const result = resetPasswordSchema.safeParse(values)
-
-  if (!result.success) {
-    return { error: "Invalid password." }
-  }
+  if (!result.success) return { error: "Invalid password." }
 
   const { password } = result.data
 
-  if (!token) {
-    return { error: "Missing token." }
-  }
+  if (!token) return { error: "Missing token." }
 
   const passwordResetToken = await db.passwordResetToken.findUnique({
     where: { token },
   })
 
-  if (!passwordResetToken) {
-    return { error: "Token does not exist." }
-  }
+  if (!passwordResetToken) return { error: "Token does not exist." }
 
   const hasExpired = new Date(passwordResetToken.expiresAt) < new Date()
-
-  if (hasExpired) {
-    return { error: "Token has expired." }
-  }
+  if (hasExpired) return { error: "Token has expired." }
 
   const user = await getUserByEmail(passwordResetToken.email)
-
-  if (!user) {
-    return { error: "Email does not exist." }
-  }
+  if (!user) return { error: "Email does not exist." }
 
   const hashedPassword = await bcrypt.hash(password, 10)
 

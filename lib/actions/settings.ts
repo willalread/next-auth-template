@@ -10,10 +10,7 @@ import { getUserByEmail } from "@/lib/user"
 
 export async function settings(values: SettingsSchema) {
   const result = settingsSchema.safeParse(values)
-
-  if (!result.success) {
-    return { error: "Invalid settings values." }
-  }
+  if (!result.success) return { error: "Invalid settings values." }
 
   let { role, name, email, password, newPassword, isTwoFactorEnabled } =
     result.data
@@ -37,10 +34,7 @@ export async function settings(values: SettingsSchema) {
 
   if (password && newPassword && user.password) {
     const passwordsMatch = await bcrypt.compare(password, user.password)
-
-    if (!passwordsMatch) {
-      return { error: "Invalid password." }
-    }
+    if (!passwordsMatch) return { error: "Invalid password." }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10)
     password = hashedPassword

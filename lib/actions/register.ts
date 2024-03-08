@@ -9,18 +9,12 @@ import { getUserByEmail } from "@/lib/user"
 
 export async function register(values: RegisterSchema) {
   const result = registerSchema.safeParse(values)
-
-  if (!result.success) {
-    return { error: "Invalid register values." }
-  }
+  if (!result.success) return { error: "Invalid register values." }
 
   const { name, email, password } = result.data
 
   const existingUser = await getUserByEmail(email)
-
-  if (existingUser) {
-    return { error: "Email already in use." }
-  }
+  if (existingUser) return { error: "Email already in use." }
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
