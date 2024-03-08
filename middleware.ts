@@ -2,44 +2,36 @@ import NextAuth from "next-auth"
 
 import authConfig from "@/auth.config"
 
+const authRoutes = [
+  "/auth/error",
+  "/auth/login",
+  "/auth/register",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+]
+
+const publicRoutes = ["/", "/auth/verify-email"]
+
 const { auth: middleware } = NextAuth(authConfig)
 
-export default middleware((req) => {
-  const { nextUrl } = req
-  const isLoggedIn = !!req.auth
+export default middleware((request) => {
+  const { auth, nextUrl } = request
+  const { pathname } = nextUrl
 
-  if (nextUrl.pathname.startsWith("/api/auth")) {
-    return
-  }
+  if (pathname.startsWith("/api/auth")) return
 
-  const isAuthRoute = [
-    "/auth/error",
-    "/auth/login",
-    "/auth/register",
-    "/auth/forgot-password",
-    "/auth/reset-password",
-  ].includes(nextUrl.pathname)
-
-  if (isAuthRoute) {
-    if (isLoggedIn) {
+  if (authRoutes.includes(pathname)) {
+    if (!!auth) {
       return Response.redirect(new URL("/user-info", nextUrl))
     }
     return
   }
 
-  const isPublicRoute = ["/", "/auth/verify-email"].includes(nextUrl.pathname)
+  if (!auth && !publicRoutes.includes(pathname)) {
+    const url = new URL("/auth/login", nextUrl)
+    url.searchParams.set("callbackUrl", pathname)
 
-  if (!isLoggedIn && !isPublicRoute) {
-    let callbackUrl = nextUrl.pathname
-    if (nextUrl.search) {
-      callbackUrl += nextUrl.search
-    }
-
-    const encodedCallbackUrl = encodeURIComponent(callbackUrl)
-
-    return Response.redirect(
-      new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
-    )
+    return Response.redirect(url)
   }
 
   return

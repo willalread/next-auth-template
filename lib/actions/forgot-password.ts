@@ -2,8 +2,7 @@
 
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { forgotPasswordSchema, type ForgotPasswordSchema } from "@/lib/schemas"
-import { createPasswordResetToken } from "@/lib/data/password-reset-token"
-import { getUserByEmail } from "@/lib/data/user"
+import { getUserByEmail } from "@/lib/user"
 
 export async function forgotPassword(values: ForgotPasswordSchema) {
   const result = forgotPasswordSchema.safeParse(values)
@@ -20,11 +19,7 @@ export async function forgotPassword(values: ForgotPasswordSchema) {
     return { error: "Email does not exist." }
   }
 
-  const passwordResetToken = await createPasswordResetToken(user.email)
-  await sendPasswordResetEmail(
-    passwordResetToken.email,
-    passwordResetToken.token,
-  )
+  await sendPasswordResetEmail(user.email)
 
   return { success: "Password reset email sent." }
 }

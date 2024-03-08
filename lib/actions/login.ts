@@ -6,13 +6,6 @@ import { signIn } from "@/auth"
 import { db } from "@/lib/db"
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail"
 import { loginSchema, type LoginSchema } from "@/lib/schemas"
-import { getTwoFactorConfirmationByUserId } from "@/lib/data/two-factor-confirmation"
-import {
-  createTwoFactorToken,
-  getTwoFactorTokenByEmail,
-} from "@/lib/data/two-factor-token"
-import { createVerificationToken } from "@/lib/data/verification-token"
-import { getUserByEmail } from "@/lib/data/user"
 
 export async function login(values: LoginSchema, callbackUrl: string | null) {
   const result = loginSchema.safeParse(values)
@@ -23,26 +16,26 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
 
   const { email, password, code } = result.data
 
-  const user = await getUserByEmail(email)
+  const user = await db.user.findUnique({
+    where: { email },
+    include: { twoFactorConfirmation: true },
+  })
 
   if (!user || !user.email || !user.password) {
     return { error: "Email does not exist." }
   }
 
   if (!user.emailVerified) {
-    const verificationToken = await createVerificationToken(user.email)
-
-    await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token,
-    )
+    await sendVerificationEmail(user.email)
 
     return { success: "Verification email sent." }
   }
 
   if (user.isTwoFactorEnabled) {
     if (code) {
-      const twoFactorToken = await getTwoFactorTokenByEmail(user.email)
+      const twoFactorToken = await db.twoFactorToken.findUnique({
+        where: { email: user.email },
+      })
 
       if (!twoFactorToken || twoFactorToken.token !== code) {
         return { error: "Invalid code." }
@@ -58,11 +51,9 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
         where: { id: twoFactorToken.id },
       })
 
-      const confirmation = await getTwoFactorConfirmationByUserId(user.id)
-
-      if (confirmation) {
+      if (user.twoFactorConfirmation) {
         await db.twoFactorConfirmation.delete({
-          where: { id: confirmation.id },
+          where: { id: user.twoFactorConfirmation.id },
         })
       }
 
@@ -72,8 +63,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
         },
       })
     } else {
-      const twoFactorToken = await createTwoFactorToken(user.email)
-      await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token)
+      await sendTwoFactorTokenEmail(user.email)
 
       return { twoFactor: true }
     }
@@ -89,7 +79,7 @@ export async function login(values: LoginSchema, callbackUrl: string | null) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid email or password." }
+          return { error: "Invalid credentials." }
         default:
           return { error: "Something went wrong." }
       }

@@ -4,8 +4,7 @@ import bcrypt from "bcryptjs"
 
 import { db } from "@/lib/db"
 import { resetPasswordSchema, type ResetPasswordSchema } from "@/lib/schemas"
-import { getPasswordResetTokenByToken } from "@/lib/data/password-reset-token"
-import { getUserByEmail } from "@/lib/data/user"
+import { getUserByEmail } from "@/lib/user"
 
 export async function resetPassword(
   values: ResetPasswordSchema,
@@ -23,7 +22,9 @@ export async function resetPassword(
     return { error: "Missing token." }
   }
 
-  const passwordResetToken = await getPasswordResetTokenByToken(token)
+  const passwordResetToken = await db.passwordResetToken.findUnique({
+    where: { token },
+  })
 
   if (!passwordResetToken) {
     return { error: "Token does not exist." }

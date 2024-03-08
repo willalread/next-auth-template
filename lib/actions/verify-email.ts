@@ -1,11 +1,12 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { getVerificationTokenByToken } from "@/lib/data/verification-token"
-import { getUserByEmail } from "@/lib/data/user"
+import { getUserByEmail } from "@/lib/user"
 
 export async function verifyEmail(token: string) {
-  const verificationToken = await getVerificationTokenByToken(token)
+  const verificationToken = await db.verificationToken.findUnique({
+    where: { token },
+  })
 
   if (!verificationToken) {
     return { error: "Token does not exist." }

@@ -6,8 +6,7 @@ import { db } from "@/lib/db"
 import { currentUser } from "@/lib/auth"
 import { sendVerificationEmail } from "@/lib/mail"
 import { settingsSchema, type SettingsSchema } from "@/lib/schemas"
-import { createVerificationToken } from "@/lib/data/verification-token"
-import { getUserByEmail } from "@/lib/data/user"
+import { getUserByEmail } from "@/lib/user"
 
 export async function settings(values: SettingsSchema) {
   const result = settingsSchema.safeParse(values)
@@ -54,9 +53,7 @@ export async function settings(values: SettingsSchema) {
       return { error: "Email already in use." }
     }
 
-    const verificationToken = await createVerificationToken(email)
-
-    await sendVerificationEmail(email, verificationToken.token)
+    await sendVerificationEmail(email)
 
     emailVerified = null
     success = "Verification email set."
