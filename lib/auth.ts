@@ -1,5 +1,6 @@
+import { PrismaAdapter } from "@auth/prisma-adapter"
 import bcrypt from "bcryptjs"
-import type { NextAuthConfig } from "next-auth"
+import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import Github from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
@@ -7,7 +8,36 @@ import Google from "next-auth/providers/google"
 import { db } from "@/lib/db"
 import { loginSchema } from "@/lib/schemas"
 
-export default {
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth({
+  adapter: PrismaAdapter(db),
+  session: { strategy: "jwt" },
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub
+      }
+
+      return session
+    },
+  },
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      })
+    },
+  },
+  pages: {
+    error: "/auth/error",
+    signIn: "/auth/login",
+    newUser: "/auth/register",
+  },
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -54,4 +84,4 @@ export default {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-} satisfies NextAuthConfig
+})

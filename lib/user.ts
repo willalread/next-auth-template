@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 
-import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 
 export async function currentUser() {

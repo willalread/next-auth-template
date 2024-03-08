@@ -3,7 +3,7 @@
 import bcrypt from "bcryptjs"
 import { AuthError } from "next-auth"
 
-import { signIn } from "@/auth"
+import { signIn } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail"
 import { loginSchema, type LoginSchema } from "@/lib/schemas"

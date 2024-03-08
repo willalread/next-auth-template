@@ -1,6 +1,4 @@
-import NextAuth from "next-auth"
-
-import authConfig from "@/auth.config"
+import { auth as middleware } from "@/lib/auth"
 
 const authRoutes = [
   "/auth/error",
@@ -11,8 +9,6 @@ const authRoutes = [
 ]
 
 const publicRoutes = ["/", "/auth/verify-email"]
-
-const { auth: middleware } = NextAuth(authConfig)
 
 export default middleware((request) => {
   const { auth, nextUrl } = request
