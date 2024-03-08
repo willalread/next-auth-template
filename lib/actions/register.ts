@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs"
 import { db } from "@/lib/db"
 import { sendVerificationEmail } from "@/lib/mail"
 import { registerSchema, type RegisterSchema } from "@/lib/schemas"
-import { getUserByEmail } from "@/lib/user"
 
 export async function register(values: RegisterSchema) {
   const result = registerSchema.safeParse(values)
@@ -13,7 +12,8 @@ export async function register(values: RegisterSchema) {
 
   const { name, email, password } = result.data
 
-  const existingUser = await getUserByEmail(email)
+  const existingUser = await db.user.findUnique({ where: { email } })
+
   if (existingUser) return { error: "Email already in use." }
 
   const hashedPassword = await bcrypt.hash(password, 10)

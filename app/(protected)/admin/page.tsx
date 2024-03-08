@@ -1,6 +1,6 @@
 import { LuKeyRound } from "react-icons/lu"
 
-import { currentUser } from "@/lib/auth"
+import { currentUser } from "@/lib/user"
 import { AdminActions } from "@/components/auth/admin-actions"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 

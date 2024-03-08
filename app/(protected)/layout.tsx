@@ -1,4 +1,4 @@
-import { currentUser } from "@/lib/auth"
+import { currentUser } from "@/lib/user"
 import { Navbar } from "@/components/navbar"
 
 export default async function ProtectedLayout({

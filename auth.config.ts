@@ -6,7 +6,6 @@ import Google from "next-auth/providers/google"
 
 import { db } from "@/lib/db"
 import { loginSchema } from "@/lib/schemas"
-import { getUserByEmail } from "@/lib/user"
 
 export default {
   providers: [
@@ -19,7 +18,7 @@ export default {
 
         const { email, password, code } = result.data
 
-        const user = await getUserByEmail(email)
+        const user = await db.user.findUnique({ where: { email } })
 
         if (!user || !user.email || !user.emailVerified || !user.password) {
           return null

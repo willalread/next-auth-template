@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs"
 
 import { db } from "@/lib/db"
 import { resetPasswordSchema, type ResetPasswordSchema } from "@/lib/schemas"
-import { getUserByEmail } from "@/lib/user"
 
 export async function resetPassword(
   values: ResetPasswordSchema,
@@ -26,7 +25,10 @@ export async function resetPassword(
   const hasExpired = new Date(passwordResetToken.expiresAt) < new Date()
   if (hasExpired) return { error: "Token has expired." }
 
-  const user = await getUserByEmail(passwordResetToken.email)
+  const user = await db.user.findUnique({
+    where: { email: passwordResetToken.email },
+  })
+
   if (!user) return { error: "Email does not exist." }
 
   const hashedPassword = await bcrypt.hash(password, 10)

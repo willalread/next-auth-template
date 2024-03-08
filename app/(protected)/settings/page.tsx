@@ -1,4 +1,4 @@
-import { currentUser } from "@/lib/auth"
+import { currentUser } from "@/lib/user"
 import { SettingsForm } from "@/components/auth/settings-form"
 
 export default async function SettingsPage() {

@@ -1,6 +1,6 @@
 import { LuInfo } from "react-icons/lu"
 
-import { currentUser } from "@/lib/auth"
+import { currentUser } from "@/lib/user"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 

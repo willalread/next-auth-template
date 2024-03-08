@@ -3,7 +3,7 @@
 import { ExitIcon } from "@radix-ui/react-icons"
 import { FaUser } from "react-icons/fa"
 
-import type { User } from "@/lib/auth"
+import type { User } from "@/lib/user"
 import { logout } from "@/lib/actions/logout"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import {

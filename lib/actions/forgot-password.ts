@@ -1,8 +1,8 @@
 "use server"
 
+import { db } from "@/lib/db"
 import { sendPasswordResetEmail } from "@/lib/mail"
 import { forgotPasswordSchema, type ForgotPasswordSchema } from "@/lib/schemas"
-import { getUserByEmail } from "@/lib/user"
 
 export async function forgotPassword(values: ForgotPasswordSchema) {
   const result = forgotPasswordSchema.safeParse(values)
@@ -10,7 +10,7 @@ export async function forgotPassword(values: ForgotPasswordSchema) {
 
   const { email } = result.data
 
-  const user = await getUserByEmail(email)
+  const user = await db.user.findUnique({ where: { email } })
 
   if (!user || !user.email || !user.password) {
     return { error: "Email does not exist." }

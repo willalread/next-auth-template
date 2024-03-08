@@ -3,10 +3,9 @@
 import bcrypt from "bcryptjs"
 
 import { db } from "@/lib/db"
-import { currentUser } from "@/lib/auth"
 import { sendVerificationEmail } from "@/lib/mail"
 import { settingsSchema, type SettingsSchema } from "@/lib/schemas"
-import { getUserByEmail } from "@/lib/user"
+import { currentUser } from "@/lib/user"
 
 export async function settings(values: SettingsSchema) {
   const result = settingsSchema.safeParse(values)
@@ -41,7 +40,7 @@ export async function settings(values: SettingsSchema) {
   }
 
   if (email !== user.email) {
-    const existingUser = await getUserByEmail(email)
+    const existingUser = await db.user.findUnique({ where: { email } })
 
     if (existingUser && existingUser.id !== user.id) {
       return { error: "Email already in use." }
