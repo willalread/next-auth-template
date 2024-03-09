@@ -19,6 +19,11 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
 
 export function LoginForm() {
   const [success, setSuccess] = useState<string | undefined>()
@@ -71,18 +76,27 @@ export function LoginForm() {
             control={form.control}
             name="code"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>MFA Code</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    placeholder="123456"
-                    type="text"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              <div className="flex flex-col items-center">
+                <FormItem>
+                  <FormLabel>MFA Code</FormLabel>
+                  <FormControl>
+                    <InputOTP
+                      disabled={isPending}
+                      maxLength={6}
+                      onComplete={form.handleSubmit(handleSubmit)}
+                      render={({ slots }) => (
+                        <InputOTPGroup>
+                          {slots.map((slot, index) => (
+                            <InputOTPSlot key={index} {...slot} />
+                          ))}{" "}
+                        </InputOTPGroup>
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              </div>
             )}
           />
         ) : (
@@ -135,9 +149,11 @@ export function LoginForm() {
         )}
         <SuccessMessage message={success} />
         {!success && <ErrorMessage message={error || urlError} />}
-        <Button disabled={isPending} type="submit" className="w-full">
-          {showTwoFactor ? "Submit" : "Login"}
-        </Button>
+        {!showTwoFactor && (
+          <Button disabled={isPending} type="submit" className="w-full">
+            Login
+          </Button>
+        )}
       </form>
     </Form>
   )
