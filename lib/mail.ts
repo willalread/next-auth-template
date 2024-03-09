@@ -3,8 +3,8 @@ import { Resend } from "resend"
 
 import { db } from "@/lib/db"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const domain = process.env.NEXT_PUBLIC_APP_URL
+const resend = new Resend(process.env.RESEND_SECRET)
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 export async function sendVerificationEmail(email: string) {
   const existingToken = await db.verificationToken.findUnique({
@@ -30,7 +30,7 @@ export async function sendVerificationEmail(email: string) {
     },
   })
 
-  const link = `${domain}/auth/verify-email?token=${verificationToken.token}`
+  const link = `${baseUrl}/auth/verify-email?token=${verificationToken.token}`
 
   await resend.emails.send({
     from: "Auth Security <security@kratoform.com>",
@@ -64,7 +64,7 @@ export async function sendPasswordResetEmail(email: string) {
     },
   })
 
-  const link = `${domain}/auth/reset-password?token=${passwordResetToken.token}`
+  const link = `${baseUrl}/auth/reset-password?token=${passwordResetToken.token}`
 
   await resend.emails.send({
     from: "Auth Security <security@kratoform.com>",
